@@ -87,7 +87,10 @@ describe('sleepqueue', function() {
     var queue = sleepqueue();
     var called = false;
 
-    queue.push(function() { return reject('test').catch(function(){}); });
+    queue.push(function() {
+      return reject('test')().catch(function(){});
+    });
+
     queue.once('error', function(err) { called = true; });
 
     setTimeout(function() {
@@ -138,7 +141,7 @@ describe('sleepqueue', function() {
         expect(queue.push(resolve(1))).to.eventually.equal(1),
         expect(queue.push(resolve(2))).to.eventually.equal(2),
         expect(queue.push(resolve(3))).to.eventually.equal(3)
-      ]); 
+      ]);
     });
 
     it('returns rejected errors when a callback throws an error', function() {
@@ -171,7 +174,7 @@ describe('sleepqueue', function() {
         expect(queue.unshift(resolve(1))).to.eventually.equal(1),
         expect(queue.unshift(resolve(2))).to.eventually.equal(2),
         expect(queue.unshift(resolve(3))).to.eventually.equal(3)
-      ]); 
+      ]);
     });
 
     it('returns rejected errors when a callback throws an error', function() {
@@ -184,7 +187,7 @@ describe('sleepqueue', function() {
 
   function reject(val) {
     return function() {
-      throw val;
+      return Promise.reject(val);
     };
   }
 

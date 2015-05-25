@@ -37,8 +37,9 @@ var sleepqueue = function(opts) {
       var fn = cb[0];
       var deferred = cb[1];
 
-      Promise.resolve().then(fn).catch(deferred.reject).then(deferred.resolve);
-      deferred.promise.catch(onError).then(function() {
+      var p = Promise.resolve().then(fn).then(deferred.resolve);
+      p.catch(deferred.reject);
+      p.catch(onError).then(function() {
         currentTimeout = setTimeout(next, opts.interval);
       });
     });

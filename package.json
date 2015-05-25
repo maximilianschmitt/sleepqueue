@@ -1,6 +1,25 @@
 {
   "name": "sleepqueue",
   "version": "0.0.1",
+  "description": "A promise-based queue that sleeps between callbacks",
+  "homepage": "https://github.com/maximilianschmitt/sleepqueue",
+  "bugs": "https://github.com/maximilianschmitt/sleepqueue/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Maximilian Schmitt",
+    "email": "maximilian.schmitt@googlemail.com",
+    "url": "http://maximilianschmitt.me"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maximilianschmitt/sleepqueue.git"
+  },
+  "main": "./sleepqueue",
+  "scripts": {
+    "test": "istanbul cover _mocha",
+    "prepublish": "npm test",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
+  },
   "dependencies": {
     "object.assign": "^3.0.0",
     "then-sleep": "^1.0.1"
@@ -8,6 +27,8 @@
   "devDependencies": {
     "chai": "^2.3.0",
     "chai-as-promised": "^5.0.0",
+    "coveralls": "^2.11.2",
+    "istanbul": "^0.3.14",
     "mocha": "^2.2.5"
   }
 }
