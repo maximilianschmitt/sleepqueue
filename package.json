@@ -1,6 +1,6 @@
 {
   "name": "sleepqueue",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A promise-based queue that sleeps between callbacks",
   "homepage": "https://github.com/maximilianschmitt/sleepqueue",
   "bugs": "https://github.com/maximilianschmitt/sleepqueue/issues",
