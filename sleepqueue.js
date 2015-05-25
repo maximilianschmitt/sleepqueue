@@ -1,5 +1,6 @@
 'use strict';
 
+var defer = require('promise-defer');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object.assign');
 var sleep = require('then-sleep');
@@ -46,7 +47,7 @@ var sleepqueue = function(opts) {
   }
 
   function push(fn) {
-    var deferred = Promise.defer();
+    var deferred = defer();
 
     queue.push([fn, deferred]);
 
@@ -58,7 +59,7 @@ var sleepqueue = function(opts) {
   }
 
   function unshift(fn) {
-    var deferred = Promise.defer();
+    var deferred = defer();
 
     queue.unshift([fn, deferred]);
 

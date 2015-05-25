@@ -21,7 +21,9 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
+    "native-promise-only": "^0.7.8-a",
     "object.assign": "^3.0.0",
+    "promise-defer": "^1.0.0",
     "then-sleep": "^1.0.1"
   },
   "devDependencies": {

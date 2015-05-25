@@ -1,5 +1,6 @@
 'use strict';
 
+global.Promise = require('native-promise-only');
 var sleepqueue = require('./sleepqueue');
 var sleep = require('then-sleep');
 var chai = require('chai');
@@ -13,14 +14,14 @@ describe('sleepqueue', function() {
   });
 
   it('waits `interval` between callbacks', function() {
-    var queue = sleepqueue({ interval: 10 });
+    var queue = sleepqueue({ interval: 20 });
     var then = Date.now();
 
     queue.push(resolve());
     queue.push(resolve());
 
     return queue.push(resolve()).then(function() {
-      expect(Date.now() - then).to.be.within(20, 30);
+      expect(Date.now() - then).to.be.within(40, 59);
     });
   });
 
