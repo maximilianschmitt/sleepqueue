@@ -15,7 +15,7 @@ $ npm i sleepqueue -S
 ### General
 
 ```js
-var sleepqueue = require('./sleepqueue');
+var sleepqueue = require('sleepqueue');
 
 // create a queue with an interval of 1 second
 var queue = sleepqueue({ interval: 1000 });
