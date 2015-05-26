@@ -25,7 +25,7 @@ queue.push(print('My name is'));
 queue.push(print('My name is'));
 queue.push(print('My name is'));
 queue.push(print('Slim Shady'));
-//
+
 // `unshift` pushes to the start of the queue
 queue.unshift(print('Hi'));
 
