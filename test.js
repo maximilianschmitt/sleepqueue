@@ -1,8 +1,8 @@
 'use strict';
 
 global.Promise = require('native-promise-only');
+
 var sleepqueue = require('./sleepqueue');
-var sleep = require('then-sleep');
 var chai = require('chai');
 var expect = chai.expect;
 

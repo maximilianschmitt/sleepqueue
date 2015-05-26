@@ -3,7 +3,6 @@
 var defer = require('promise-defer');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object.assign');
-var sleep = require('then-sleep');
 
 var sleepqueue = function(opts) {
   opts = assign({}, { interval: 0 }, opts || {});
