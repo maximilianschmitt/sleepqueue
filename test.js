@@ -1,3 +1,4 @@
+/* global describe, it */
 'use strict';
 
 global.Promise = require('native-promise-only');
@@ -14,15 +15,21 @@ describe('sleepqueue', function() {
   });
 
   it('waits `interval` between callbacks', function() {
-    var queue = sleepqueue({ interval: 20 });
+    var queue = sleepqueue({ interval: 200 });
     var then = Date.now();
 
-    queue.push(resolve());
-    queue.push(resolve());
+    return Promise.all([
+      queue.push(resolve()).then(expectDelay(0)),
+      queue.push(resolve()).then(expectDelay(200)),
+      queue.push(resolve()).then(expectDelay(400)),
+      queue.push(resolve()).then(expectDelay(600))
+    ]);
 
-    return queue.push(resolve()).then(function() {
-      expect(Date.now() - then).to.be.within(40, 59);
-    });
+    function expectDelay(time) {
+      return function() {
+        expect(Date.now() - then).to.be.within(time, time + 100);
+      };
+    }
   });
 
   it('executes first callback immediately', function() {
@@ -92,7 +99,7 @@ describe('sleepqueue', function() {
       return reject('test')().catch(function(){});
     });
 
-    queue.once('error', function(err) { called = true; });
+    queue.once('error', function() { called = true; });
 
     setTimeout(function() {
       expect(called).to.equal(false);
