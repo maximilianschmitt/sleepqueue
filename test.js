@@ -4,6 +4,7 @@
 global.Promise = require('native-promise-only');
 
 var sleepqueue = require('./sleepqueue');
+var sleep = require('then-sleep');
 var chai = require('chai');
 var expect = chai.expect;
 
@@ -24,6 +25,28 @@ describe('sleepqueue', function() {
       queue.push(resolve()).then(expectDelay(400)),
       queue.push(resolve()).then(expectDelay(600))
     ]);
+
+    function expectDelay(time) {
+      return function() {
+        expect(Date.now() - then).to.be.within(time, time + 100);
+      };
+    }
+  });
+
+  it('waits `interval` between callback completions', function() {
+    var queue = sleepqueue({ interval: 100 });
+    var then = Date.now();
+
+    return pushDelay()
+      .then(expectDelay(100))
+      .then(pushDelay)
+      .then(expectDelay(300))
+      .then(pushDelay)
+      .then(expectDelay(500));
+
+    function pushDelay() {
+      return queue.push(delay(100));
+    }
 
     function expectDelay(time) {
       return function() {
@@ -209,6 +232,12 @@ describe('sleepqueue', function() {
     return function() {
       array.push(num);
       return Promise.resolve(num);
+    };
+  }
+
+  function delay(time) {
+    return function() {
+      return sleep(time);
     };
   }
 });

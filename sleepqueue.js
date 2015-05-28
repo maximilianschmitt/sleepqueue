@@ -6,13 +6,15 @@ var assign = require('object.assign');
 
 var sleepqueue = function(opts) {
   opts = assign({}, { interval: 0 }, opts || {});
+  var scheduled = false;
   var currentTimeout = null;
   var queue = [];
 
   var api = {
     push: push,
     unshift: unshift,
-    stop: stop
+    stop: stop,
+    length: length
   };
 
   assign(api, EventEmitter.prototype);
@@ -21,15 +23,20 @@ var sleepqueue = function(opts) {
   return api;
 
   function start() {
-    clean();
-    next();
+    if (!scheduled) {
+      clean();
+      next();
+    }
   }
 
   function next() {
+    scheduled = true;
+
     setTimeout(function() {
       var cb = queue.shift();
 
       if (!cb) {
+        scheduled = false;
         api.emit('empty');
         return;
       }
@@ -39,9 +46,11 @@ var sleepqueue = function(opts) {
 
       var p = Promise.resolve().then(fn).then(deferred.resolve);
       p.catch(deferred.reject);
-      p.catch(onError).then(function() {
+      p.catch(onError).then(scheduleNext);
+
+      function scheduleNext() {
         currentTimeout = setTimeout(next, opts.interval);
-      });
+      }
     });
   }
 
@@ -75,9 +84,15 @@ var sleepqueue = function(opts) {
   }
 
   function clean() {
+    scheduled = false;
+
     if (currentTimeout) {
       clearTimeout(currentTimeout);
     }
+  }
+
+  function length() {
+    return queue.length;
   }
 
   function onError(err) {
